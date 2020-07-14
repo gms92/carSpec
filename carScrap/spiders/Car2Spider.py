@@ -1,7 +1,7 @@
 import scrapy
 import os
 import pprint
-from service import stringSeparate,createCleanCarSpec
+from service import createCleanCarSpec
 # import pymongo
 
 class Car2Spider(scrapy.Spider):
@@ -27,12 +27,25 @@ class Car2Spider(scrapy.Spider):
         keysFilter = []
         valuesFilter = []
 
+        ['Dianteira', 'Elemento elástico']
+        ['Dianteiros', 'Altura do flanco'],
+
         for c in keys:
             if c[0] == 'Dianteiros' and c[1] == 'Traseiros':
-                c = ['Dianteiros-freios','Traseiros-freios']
-                for a in c:
-                    a.strip()
-                    
+                c = ['Freios dianteiros','Freios traseiros']
+
+            if c[0] == 'Dianteira' and c[1] == 'Elemento elástico':
+                c = ['Suspensão dianteira','Elemento elástico dianteiro']
+
+            if c[0] == 'Traseira' and c[1] == 'Elemento elástico':
+                c = ['Suspensão traseira','Elemento elástico traseiro']
+
+            if c[0] == 'Dianteiros' and c[1] == 'Altura do flanco':
+                c = ['Pneus dianteiros','Altura do flanco dianteiro']
+
+            if c[0] == 'Traseiros' and c[1] == 'Altura do flanco':
+                c = ['Pneus traseiros','Altura do flanco traseiro']
+                
             keysFilter.append(c)
 
         for c in values:
@@ -62,11 +75,11 @@ class Car2Spider(scrapy.Spider):
         # keysFilter.append(['Urbana1','Rodoviaria1'])
         # keysFilter.append(['Urbana2','Rodoviaria2'])
 
-        keysFilter[-2] = ['Urbano-consumo','Rodoviario-consumo']
-        keysFilter[-1] = ['Urbano-consumo2','Rodoviario-consumo2']
+        keysFilter[-2] = ['Consumo urbano','Consumo rodoviario']
+        keysFilter[-1] = ['Consumo urbano2','Consumo rodoviario2']
 
-        keysFilter.append(['Urbana-autonomia','Rodoviaria-autonomia'])
-        keysFilter.append(['Urbana-autonomia2','Rodoviaria-autonomia2'])
+        keysFilter.append(['Autonomia urbana','Autonomia rodoviaria'])
+        keysFilter.append(['Autonomia urbana2','Autonomia rodoviaria2'])
 
         # pprint.pprint(keysFilter)
         # pprint.pprint(valuesFilter)
@@ -76,15 +89,17 @@ class Car2Spider(scrapy.Spider):
 
         carSpecRaw = {k.strip(): v for (k, v) in carSpecRaw.items()}
 
-        if 'Urbana-autonomia' not in carSpecRaw:
-            carSpecRaw['Urbana-autonomia'] = carSpecRaw.pop('Urbano-consumo2')
-            carSpecRaw['Rodoviaria-autonomia'] = carSpecRaw.pop('Rodoviario-consumo2')
+        if 'Autonomia urbana' not in carSpecRaw:
+            carSpecRaw['Autonomia urbana'] = carSpecRaw.pop('Consumo urbano2')
+            carSpecRaw['Autonomia rodoviaria'] = carSpecRaw.pop('Consumo rodoviario2')
 
-        # pprint.pprint(carSpecRaw)
+        # pprint.pprint(keys)
+        
+        pprint.pprint(carSpecRaw)
 
-        carSpec = createCleanCarSpec(carSpecRaw,carName)
+        # carSpec = createCleanCarSpec(carSpecRaw,carName)
 
-        pprint.pprint(carSpec)
+        # pprint.pprint(carSpec)
 
 
         
