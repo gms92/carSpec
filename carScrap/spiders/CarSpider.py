@@ -1,12 +1,12 @@
 import scrapy
 import os
-import keys
+
 
 
 class CarSpider(scrapy.Spider):
     name = 'CarSpider'
     
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.1441.html']
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(15000,15010)]
 
     # .format(c) for c in range(1,5)
 
