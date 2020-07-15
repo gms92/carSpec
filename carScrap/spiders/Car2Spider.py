@@ -7,7 +7,7 @@ from service import createCleanCarSpec
 class Car2Spider(scrapy.Spider):
     name = 'Car2Spider'
     
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.1441.html']
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.11311.html']
     # .format(c) for c in range(15000,15010)]
 
     def parse(self, response):
@@ -48,23 +48,30 @@ class Car2Spider(scrapy.Spider):
                 
             keysFilter.append(c)
 
+        
+        
         for c in values:
+
             c = [a for a in c if "\n" not in a]
+            c = [a for a in c if a!="1"]
+            c = [a for a in c if a!="2"]
+            c = [a for a in c if a!="3"]
 
+            for a in c:
+                if a==' kg/cv' or a==' kg/kgfm':
+                    c[0]=c[0]+c[1]
+                    c.pop(1)
+
+                if 'rpm' in a and 'kgfm' in a:
+                    c[0]=c[0]+c[1]
+                    c.pop(1)
+                
             if len(c)>2:
-                c = [a for a in c if a!="1"]
-                c = [a for a in c if a!="2"]
-                c = [a for a in c if a!="3"]
+                c[-1]= c[-2]+" "+c[-1]
+                c.pop(-2)
 
-                for a in c:
-                    if a==' kg/cv' or a==' kg/kgfm':
-                        c[0]=c[0]+c[1]
-                        c.pop(1)
-
-
-                if len(c)>2:
-                    c[-1]= c[-2]+" "+c[-1]
-                    c.pop(-2)
+                 
+            
                 
             valuesFilter.append(c)
 
@@ -93,13 +100,17 @@ class Car2Spider(scrapy.Spider):
             carSpecRaw['Autonomia urbana'] = carSpecRaw.pop('Consumo urbano2')
             carSpecRaw['Autonomia rodoviaria'] = carSpecRaw.pop('Consumo rodoviario2')
 
-        # pprint.pprint(keys)
+        # pprint.pprint(values)
+        # pprint.pprint(valuesFilter)
+
+        # pprint.pprint(keyRaw)
         
-        pprint.pprint(carSpecRaw)
+        
+        # pprint.pprint(carSpecRaw)
 
-        # carSpec = createCleanCarSpec(carSpecRaw,carName)
+        carSpec = createCleanCarSpec(carSpecRaw,carName)
 
-        # pprint.pprint(carSpec)
+        pprint.pprint(carSpec)
 
 
         
