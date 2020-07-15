@@ -7,7 +7,7 @@ from service import createCleanCarSpec
 class Car2Spider(scrapy.Spider):
     name = 'Car2Spider'
     
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.11311.html']
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.9540.html']
     # .format(c) for c in range(15000,15010)]
 
     def parse(self, response):
@@ -27,9 +27,7 @@ class Car2Spider(scrapy.Spider):
         keysFilter = []
         valuesFilter = []
 
-        ['Dianteira', 'Elemento elástico']
-        ['Dianteiros', 'Altura do flanco'],
-
+        
         for c in keys:
             if c[0] == 'Dianteiros' and c[1] == 'Traseiros':
                 c = ['Freios dianteiros','Freios traseiros']
@@ -52,27 +50,27 @@ class Car2Spider(scrapy.Spider):
         
         for c in values:
 
-            c = [a for a in c if "\n" not in a]
-            c = [a for a in c if a!="1"]
-            c = [a for a in c if a!="2"]
-            c = [a for a in c if a!="3"]
+            if len(c)>2:
+                c = [a for a in c if a!="1"]
+                c = [a for a in c if a!="2"]
+                c = [a for a in c if a!="3"]
 
+            c = [a for a in c if "\n" not in a]
+            
             for a in c:
                 if a==' kg/cv' or a==' kg/kgfm':
                     c[0]=c[0]+c[1]
                     c.pop(1)
 
                 if 'rpm' in a and 'kgfm' in a:
-                    c[0]=c[0]+c[1]
-                    c.pop(1)
+                    c[-1]=c[-2]+c[-1]
+                    c.pop(-2)
                 
             if len(c)>2:
                 c[-1]= c[-2]+" "+c[-1]
                 c.pop(-2)
 
                  
-            
-                
             valuesFilter.append(c)
 
 
@@ -101,9 +99,9 @@ class Car2Spider(scrapy.Spider):
             carSpecRaw['Autonomia rodoviaria'] = carSpecRaw.pop('Consumo rodoviario2')
 
         # pprint.pprint(values)
+        # print('------------------------------------------------------------------')
         # pprint.pprint(valuesFilter)
-
-        # pprint.pprint(keyRaw)
+        # pprint.pprint(keysFilter)
         
         
         # pprint.pprint(carSpecRaw)

@@ -42,8 +42,8 @@ def separateVolume(string):
     splited = string.split()
     splitedList = []
 
-    splitedList.append(int(splited[0]))
-    splitedList.append("cm")
+    splitedList.append(float(splited[0].replace(',','.')))
+    splitedList.append(splited[1])
     splitedList.append(3)
 
     return splitedList
@@ -53,8 +53,8 @@ def separateArea(string):
     splited = string.split()
     splitedList = []
 
-    splitedList.append(int(splited[0]))
-    splitedList.append("cm")
+    splitedList.append(float(splited[0].replace(',','.')))
+    splitedList.append(splited[1])
     splitedList.append(2)
 
     return splitedList
@@ -66,7 +66,64 @@ def separateCompressionRatio(string):
     splitedList.extend((float(splited[0].replace(",", ".")), int(splited[1])))
     return splitedList
 
+def separateFuelUse(carSpecRaw,option):
 
+    if option == 'urban':
+
+        splited = stringSeparateFloat(carSpecRaw['Consumo urbano'])
+        splitedList = []
+
+        if 'Consumo urbano2' in carSpecRaw:
+            splited_2 = stringSeparateFloat(carSpecRaw['Consumo urbano2'])
+            splitedList.extend((splited,splited_2))
+            return splitedList
+        
+        else:
+            return splited
+        
+    elif option == 'road':
+
+        splited = stringSeparateFloat(carSpecRaw['Consumo rodoviario'])
+        splitedList = []
+
+        if 'Consumo rodoviario2' in carSpecRaw:
+            splited_2 = stringSeparateFloat(carSpecRaw['Consumo rodoviario2'])
+            splitedList.extend((splited,splited_2))
+            return splitedList
+        
+        else:
+            return splited
+
+
+def separateDrivingRange(carSpecRaw,option):
+
+    if option == 'urban':
+
+        splited = stringSeparateFloat(carSpecRaw['Autonomia urbana'])
+        splitedList = []
+
+        if 'Autonomia urbana2' in carSpecRaw:
+            splited_2 = stringSeparateFloat(carSpecRaw['Autonomia urbana2'])
+            splitedList.extend((splited,splited_2))
+            return splitedList
+        
+        else:
+            return splited
+        
+    elif option == 'road':
+
+        splited = stringSeparateFloat(carSpecRaw['Autonomia rodoviaria'])
+        splitedList = []
+
+        if 'Autonomia rodoviaria2' in carSpecRaw:
+            splited_2 = stringSeparateFloat(carSpecRaw['Autonomia rodoviaria2'])
+            splitedList.extend((splited,splited_2))
+            return splitedList
+        
+        else:
+            return splited
+        
+        
 def createCleanCarSpec(carSpecRaw, carName):
     carSpec = {
         "name": carName,
@@ -83,6 +140,7 @@ def createCleanCarSpec(carSpecRaw, carName):
         "capacity": int(carSpecRaw["Lugares"]) if 'Lugares' in carSpecRaw else None,
         "doors": int(carSpecRaw["Portas"]) if 'Portas' in carSpecRaw else None,
         "generation": int(carSpecRaw["Geração"]) if 'Geração' in carSpecRaw else None,
+        "platform": carSpecRaw["Plataforma"] if 'Plataforma' in carSpecRaw else None,
         "index-CNW": float(carSpecRaw["Índice CNW"].replace(",", ".")) if 'Índice CNW' in carSpecRaw else None,
         "ranking-CNW": int(carSpecRaw["Ranking CNW"]) if 'Ranking CNW' in carSpecRaw else None,
 
@@ -151,67 +209,31 @@ def createCleanCarSpec(carSpecRaw, carName):
             "payload": stringSeparateFloat(carSpecRaw['Carga útil']) if 'Carga útil' in carSpecRaw else None,
             "free-span-ground": stringSeparateFloat(carSpecRaw['Vão livre do solo']) if 'Vão livre do solo' in carSpecRaw else None,
 
+        },
+
+        "aerodynamics": {
+            "front-area": separateArea(carSpecRaw['Área frontal (A)']) if 'Área frontal (A)' in carSpecRaw else None,
+            "drag-coefficient": stringSeparateFloat(carSpecRaw['Coeficiente de arrasto (Cx)']) if 'Coeficiente de arrasto (Cx)' in carSpecRaw else None,
+            "front-area-corrected": separateArea(carSpecRaw['Área frontal corrigida']) if 'Área frontal corrigida' in carSpecRaw else None,
+        },
+
+        "performance": {
+            "max-speed": stringSeparateFloat(carSpecRaw['Velocidade máxima']) if 'Velocidade máxima' in carSpecRaw else None,
+            "acceleration-0-100-km/h": stringSeparateFloat(carSpecRaw['Aceleração 0-100 km/h']) if 'Aceleração 0-100 km/h' in carSpecRaw else None,
+        },
+
+        "fuel-use": {
+            "urban": separateFuelUse(carSpecRaw,'urban') if 'Consumo urbano' in carSpecRaw else None,
+            "road": separateFuelUse(carSpecRaw,'road') if 'Consumo rodoviario' in carSpecRaw else None,
+        },
+
+        "driving-range": {
+            "urban": separateDrivingRange(carSpecRaw,'urban') if 'Autonomia urbana' in carSpecRaw else None,
+            "road": separateDrivingRange(carSpecRaw,'road') if 'Autonomia rodoviaria' in carSpecRaw else None,
         }
     }
     return carSpec
 
-    # print(obj['IPVA'])
-    # if "R$" in obj['IPVA']:
-    #     obj_IPVA = obj['IPVA'].split()
-    #     obj_IPVA_separado = []
-    #     obj_IPVA_separado.extend((obj_IPVA[0],float(obj_IPVA[1])))
-    #     obj['IPVA'] = obj_IPVA_separado
+   
 
-    # if "R$" in obj['Seguro']:
-    #     obj_seguro = obj['Seguro'].split()
-    #     obj_seguro_separado = []
-    #     obj_seguro_separado.extend((obj_seguro[0],float(obj_seguro[1])))
-    #     obj['Seguro'] = obj_seguro_separado
-
-    # obj_garantia = obj['Garantia'].split()
-    # obj_garantia_separado = []
-    # obj_garantia_separado.extend((int(obj_garantia[0].replace(',','.')),obj_garantia[1]))
-    # obj['Garantia'] = obj_garantia_separado
-
-    # obj_aceleração = obj['Aceleração 0-100 km/h'].split()
-    # obj_aceleração_separado = []
-    # obj_aceleração_separado.extend((float(obj_aceleração[0].replace(',','.')),obj_aceleração[1]))
-    # obj['Aceleração 0-100 km/h'] = obj_aceleração_separado
-
-    # x = [int(obj_aceleração[0]) + " " + obj_aceleração[1]]
-
-    # print(obj_IPVA_separado)
-
-    # obj['Aceleração 0-100 km/h'] = float(obj_aceleração[0]) + obj_aceleração[1]
-
-    # if "R$" in splited:
-
-    #     if len(splited) == 3:
-    #         splitedList.extend(
-    #             (splited[0], int(splited[1].replace(".", "")), splited[2])
-    #         )
-
-    #     elif len(splited) == 5:
-    #         unitSplited = splited[2] + " " + splited[3] + " " + splited[4]
-    #         splitedList.extend(
-    #             (splited[0], int(splited[1].replace(".", "")), unitSplited)
-    #         )
-
-    #     else:
-    #         splitedList.extend((splited[0], int(splited[1].replace(".", ""))))
-
-    #     return splitedList
-
-    # elif int(splited[0]) > 0 or float(splited[0].replace(",", ".")) > 0:
-
-    #     if len(splited) == 2:
-    #         splitedList.extend((float(splited[0].replace(",", ".")), splited[1]))
-
-    #     if len(splited)>4:
-    #         for a in splited:
-    #             # if float(a.replace(",", ".")) > 0:
-    #             #     a = 'aff'
-    #             #     # a = float(a.replace(",", "."))
-    #             #     splitedList.append(a)
-    #             # else:
-    #                 splitedList.append(a)
+ 
