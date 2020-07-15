@@ -11,9 +11,6 @@ def stringSeparateInt(string):
             a = int(a.replace(".", ""))
             splitedList.append(a)
 
-        # elif isinstance(a[0],str):
-        #     return string
-
         else:
             splitedList.append(a)
     
@@ -37,6 +34,7 @@ def stringSeparateFloat(string):
     
     return splitedList
 
+
 def separateVolume(string):
 
     splited = string.split()
@@ -47,6 +45,26 @@ def separateVolume(string):
     splitedList.append(3)
 
     return splitedList
+
+
+def separateCheckUp(string):
+
+    splited = string.split()
+    splitedList = []
+
+    if splited[0]=="R$":
+        for a in splited:
+            if a[0].isdigit():
+                a = int(a.replace(".", ""))
+                splitedList.append(a)
+            else:
+                splitedList.append(a)
+
+        return splitedList
+
+    else:
+        return string
+
 
 def separateArea(string):
 
@@ -132,7 +150,7 @@ def createCleanCarSpec(carSpecRaw, carName):
         "fuel": carSpecRaw["Combustível"] if 'Combustível' in carSpecRaw else None,
         "IPVA": stringSeparateInt(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
         "insurance": stringSeparateInt(carSpecRaw["Seguro"]) if 'Seguro' in carSpecRaw else None,
-        "check-up-price": stringSeparateInt(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
+        "check-up-price": separateCheckUp(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
         "origin": carSpecRaw["Procedência"] if 'Procedência' in carSpecRaw else None,
         "guarantee": stringSeparateInt(carSpecRaw["Garantia"]) if 'Garantia' in carSpecRaw else None,
         "configuration": carSpecRaw["Configuração"] if 'Configuração' in carSpecRaw else None,

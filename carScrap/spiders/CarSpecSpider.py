@@ -2,10 +2,11 @@ import scrapy
 import os
 import pprint
 from service import createCleanCarSpec
-# import pymongo
+from mongo import saveToMongo
 
-class Car2Spider(scrapy.Spider):
-    name = 'Car2Spider'
+
+class CarSpecSpider(scrapy.Spider):
+    name = 'CarSpecSpider'
     
     start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.9540.html']
     # .format(c) for c in range(15000,15010)]
@@ -109,6 +110,12 @@ class Car2Spider(scrapy.Spider):
         carSpec = createCleanCarSpec(carSpecRaw,carName)
 
         pprint.pprint(carSpec)
+
+        # saveToMongo(carSpec)
+
+
+
+
 
 
         
