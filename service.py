@@ -142,59 +142,60 @@ def separateDrivingRange(carSpecRaw,option):
             return splited
         
         
-def createCleanCarSpec(carSpecRaw, carName):
+def createCleanCarSpec(carSpecRaw, carName,carId):
     carSpec = {
         "name": carName,
+        "brand": 
         "year": int(carSpecRaw["Ano"]) if 'Ano' in carSpecRaw else None,
         "price": stringSeparateInt(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
         "fuel": carSpecRaw["Combustível"] if 'Combustível' in carSpecRaw else None,
         "IPVA": stringSeparateInt(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
         "insurance": stringSeparateInt(carSpecRaw["Seguro"]) if 'Seguro' in carSpecRaw else None,
-        "check-up-price": separateCheckUp(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
+        "checkUpPrice": separateCheckUp(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
         "origin": carSpecRaw["Procedência"] if 'Procedência' in carSpecRaw else None,
         "guarantee": stringSeparateInt(carSpecRaw["Garantia"]) if 'Garantia' in carSpecRaw else None,
         "configuration": carSpecRaw["Configuração"] if 'Configuração' in carSpecRaw else None,
-        "body-size": carSpecRaw["Porte"] if 'Porte' in carSpecRaw else None,
+        "bodySize": carSpecRaw["Porte"] if 'Porte' in carSpecRaw else None,
         "capacity": int(carSpecRaw["Lugares"]) if 'Lugares' in carSpecRaw else None,
         "doors": int(carSpecRaw["Portas"]) if 'Portas' in carSpecRaw else None,
         "generation": int(carSpecRaw["Geração"]) if 'Geração' in carSpecRaw else None,
         "platform": carSpecRaw["Plataforma"] if 'Plataforma' in carSpecRaw else None,
-        "index-CNW": float(carSpecRaw["Índice CNW"].replace(",", ".")) if 'Índice CNW' in carSpecRaw else None,
-        "ranking-CNW": int(carSpecRaw["Ranking CNW"]) if 'Ranking CNW' in carSpecRaw else None,
+        "indexCNW": float(carSpecRaw["Índice CNW"].replace(",", ".")) if 'Índice CNW' in carSpecRaw else None,
+        "rankingCNW": int(carSpecRaw["Ranking CNW"]) if 'Ranking CNW' in carSpecRaw else None,
 
-        "motor": {
+        "engine": {
             "installation": carSpecRaw["Instalação"] if 'Instalação' in carSpecRaw else None,
             "aspiration": carSpecRaw["Aspiração"] if 'Aspiração' in carSpecRaw else None,
             "layout": carSpecRaw["Disposição"] if 'Disposição' in carSpecRaw else None,
-            "power-supply": carSpecRaw["Alimentação"] if 'Alimentação' in carSpecRaw else None,
+            "powerSupply": carSpecRaw["Alimentação"] if 'Alimentação' in carSpecRaw else None,
             "cylinders": stringSeparateInt(carSpecRaw["Cilindros"]) if 'Cilindros' in carSpecRaw else None,
-            "valve-control": carSpecRaw["Comando de válvulas"] if 'Comando de válvulas' in carSpecRaw else None,
-            "valves-per-cylinder": int(carSpecRaw["Válvulas por cilindro"]) if 'Válvulas por cilindro' in carSpecRaw else None,
-            "cylinder-diameter": stringSeparateFloat(carSpecRaw["Diâmetro dos cilindros"]) if 'Diâmetro dos cilindros' in carSpecRaw else None,
-            "compression-ratio": separateCompressionRatio(carSpecRaw["Razão de compressão"]) if 'Razão de compressão' in carSpecRaw else None,
-            "piston-stroke": stringSeparateFloat(carSpecRaw["Curso dos pistões"]) if 'Curso dos pistões' in carSpecRaw else None,
-            "cubic-capacity": separateVolume(carSpecRaw['Cilindrada']) if 'Cilindrada' in carSpecRaw else None,
-            "max-power": stringSeparateFloat(carSpecRaw['Potência máxima']) if 'Potência máxima' in carSpecRaw else None,
-            "motor-code": carSpecRaw['Código do motor'] if 'Código do motor' in carSpecRaw else None,
-            "max-torque": stringSeparateFloat(carSpecRaw['Torque máximo']) if 'Torque máximo' in carSpecRaw else None,
-            "weight-power": stringSeparateFloat(carSpecRaw['Peso/potência']) if 'Peso/potência' in carSpecRaw else None,
-            "specific-torque": stringSeparateFloat(carSpecRaw['Torque específico']) if 'Torque específico' in carSpecRaw else None,
-            "weight-torque": stringSeparateFloat(carSpecRaw['Peso/torque']) if 'Peso/torque' in carSpecRaw else None ,
-            "specific-power": stringSeparateFloat(carSpecRaw['Potência específica']) if 'Potência específica' in carSpecRaw else None
+            "valveControl": carSpecRaw["Comando de válvulas"] if 'Comando de válvulas' in carSpecRaw else None,
+            "valvesPerCylinder": int(carSpecRaw["Válvulas por cilindro"]) if 'Válvulas por cilindro' in carSpecRaw else None,
+            "cylinderDiameter": stringSeparateFloat(carSpecRaw["Diâmetro dos cilindros"]) if 'Diâmetro dos cilindros' in carSpecRaw else None,
+            "compressionRatio": separateCompressionRatio(carSpecRaw["Razão de compressão"]) if 'Razão de compressão' in carSpecRaw else None,
+            "pistonStroke": stringSeparateFloat(carSpecRaw["Curso dos pistões"]) if 'Curso dos pistões' in carSpecRaw else None,
+            "cubicCapacity": separateVolume(carSpecRaw['Cilindrada']) if 'Cilindrada' in carSpecRaw else None,
+            "maxPower": stringSeparateFloat(carSpecRaw['Potência máxima']) if 'Potência máxima' in carSpecRaw else None,
+            "motorCode": carSpecRaw['Código do motor'] if 'Código do motor' in carSpecRaw else None,
+            "maxTorque": stringSeparateFloat(carSpecRaw['Torque máximo']) if 'Torque máximo' in carSpecRaw else None,
+            "weightPower": stringSeparateFloat(carSpecRaw['Peso/potência']) if 'Peso/potência' in carSpecRaw else None,
+            "specificTorque": stringSeparateFloat(carSpecRaw['Torque específico']) if 'Torque específico' in carSpecRaw else None,
+            "weightTorque": stringSeparateFloat(carSpecRaw['Peso/torque']) if 'Peso/torque' in carSpecRaw else None ,
+            "specificPower": stringSeparateFloat(carSpecRaw['Potência específica']) if 'Potência específica' in carSpecRaw else None
         },
 
         "transmission": {
             "traction": carSpecRaw['Tração'] if 'Tração' in carSpecRaw else None,
             "gear": carSpecRaw['Câmbio'] if 'Câmbio' in carSpecRaw else None, 
-            "gear-code": carSpecRaw['Código do câmbio'] if 'Código do câmbio' in carSpecRaw else None,
+            "gearCode": carSpecRaw['Código do câmbio'] if 'Código do câmbio' in carSpecRaw else None,
             "coupling": carSpecRaw['Acoplamento'] if 'Acoplamento' in carSpecRaw else None,
         },
 
-        "Suspension": {
+        "suspension": {
             "front": carSpecRaw['Suspensão dianteira'] if 'Suspensão dianteira' in carSpecRaw else None,
-            "front-elastic-element": carSpecRaw['Elemento elástico dianteiro'] if 'Elemento elástico dianteiro' in carSpecRaw else None,
+            "frontElasticElement": carSpecRaw['Elemento elástico dianteiro'] if 'Elemento elástico dianteiro' in carSpecRaw else None,
             "back": carSpecRaw['Suspensão traseira'] if 'Suspensão traseira' in carSpecRaw else None,
-            "back-elastic-element": carSpecRaw['Elemento elástico traseiro'] if 'Elemento elástico traseiro' in carSpecRaw else None,
+            "backElasticElement": carSpecRaw['Elemento elástico traseiro'] if 'Elemento elástico traseiro' in carSpecRaw else None,
         },
 
         "brakes": {
@@ -202,52 +203,58 @@ def createCleanCarSpec(carSpecRaw, carName):
             "back": carSpecRaw['Freios traseiros'] if 'Freios traseiros' in carSpecRaw else None,
         },
 
-        "direction": {
+        "steering": {
             "assistance": carSpecRaw['Assistência'] if 'Assistência' in carSpecRaw else None,
-            "min-rotate-diameter": carSpecRaw['Diâmetro mínimo de giro'] if 'Diâmetro mínimo de giro' in carSpecRaw else None,
+            "minRotateDiameter": carSpecRaw['Diâmetro mínimo de giro'] if 'Diâmetro mínimo de giro' in carSpecRaw else None,
         },
 
         "tires": {
             "front": carSpecRaw['Pneus dianteiros'] if 'Pneus dianteiros' in carSpecRaw else None,
-            "front-sidewall-height": stringSeparateFloat(carSpecRaw['Altura do flanco dianteiro']) if 'Altura do flanco dianteiro' in carSpecRaw else None,
+            "frontSidewallHeight": stringSeparateFloat(carSpecRaw['Altura do flanco dianteiro']) if 'Altura do flanco dianteiro' in carSpecRaw else None,
             "back": carSpecRaw['Pneus traseiros'] if 'Pneus traseiros' in carSpecRaw else None,
-            "back-sidewall-height": stringSeparateFloat(carSpecRaw['Altura do flanco traseiro']) if 'Altura do flanco traseiro' in carSpecRaw else None,
+            "backSidewallHeight": stringSeparateFloat(carSpecRaw['Altura do flanco traseiro']) if 'Altura do flanco traseiro' in carSpecRaw else None,
         },
 
         "dimensions": {
             "lenght": stringSeparateFloat(carSpecRaw['Comprimento']) if 'Comprimento' in carSpecRaw else None,
             "width": stringSeparateFloat(carSpecRaw['Largura']) if 'Largura' in carSpecRaw else None,
-            "axes-distance": stringSeparateFloat(carSpecRaw['Distância entre-eixos']) if 'Distância entre-eixos' in carSpecRaw else None,
+            "axesDistance": stringSeparateFloat(carSpecRaw['Distância entre-eixos']) if 'Distância entre-eixos' in carSpecRaw else None,
             "height": stringSeparateFloat(carSpecRaw['Altura']) if 'Altura' in carSpecRaw else None,
-            "front-gauge": stringSeparateFloat(carSpecRaw['Bitola Dianteira']) if 'Bitola Dianteira' in carSpecRaw else None,
-            "back-gauge": stringSeparateFloat(carSpecRaw['Bitola Traseira']) if 'Bitola Traseira' in carSpecRaw else None,
-            "trunk-volume": stringSeparateFloat(carSpecRaw['Porta-malas']) if 'Porta-malas' in carSpecRaw else None,
-            "fuel-tank": stringSeparateFloat(carSpecRaw['Tanque de combustível']) if 'Tanque de combustível' in carSpecRaw else None,
+            "frontGauge": stringSeparateFloat(carSpecRaw['Bitola Dianteira']) if 'Bitola Dianteira' in carSpecRaw else None,
+            "backGauge": stringSeparateFloat(carSpecRaw['Bitola Traseira']) if 'Bitola Traseira' in carSpecRaw else None,
+            "trunkVolume": stringSeparateFloat(carSpecRaw['Porta-malas']) if 'Porta-malas' in carSpecRaw else None,
+            "fuelTank": stringSeparateFloat(carSpecRaw['Tanque de combustível']) if 'Tanque de combustível' in carSpecRaw else None,
             "weight": stringSeparateFloat(carSpecRaw['Peso']) if 'Peso' in carSpecRaw else None,
             "payload": stringSeparateFloat(carSpecRaw['Carga útil']) if 'Carga útil' in carSpecRaw else None,
-            "free-span-ground": stringSeparateFloat(carSpecRaw['Vão livre do solo']) if 'Vão livre do solo' in carSpecRaw else None,
+            "freeSpanGround": stringSeparateFloat(carSpecRaw['Vão livre do solo']) if 'Vão livre do solo' in carSpecRaw else None,
 
         },
 
         "aerodynamics": {
-            "front-area": separateArea(carSpecRaw['Área frontal (A)']) if 'Área frontal (A)' in carSpecRaw else None,
-            "drag-coefficient": stringSeparateFloat(carSpecRaw['Coeficiente de arrasto (Cx)']) if 'Coeficiente de arrasto (Cx)' in carSpecRaw else None,
-            "front-area-corrected": separateArea(carSpecRaw['Área frontal corrigida']) if 'Área frontal corrigida' in carSpecRaw else None,
+            "frontArea": separateArea(carSpecRaw['Área frontal (A)']) if 'Área frontal (A)' in carSpecRaw else None,
+            "dragCoefficient": stringSeparateFloat(carSpecRaw['Coeficiente de arrasto (Cx)']) if 'Coeficiente de arrasto (Cx)' in carSpecRaw else None,
+            "frontAreaCorrected": separateArea(carSpecRaw['Área frontal corrigida']) if 'Área frontal corrigida' in carSpecRaw else None,
         },
 
         "performance": {
-            "max-speed": stringSeparateFloat(carSpecRaw['Velocidade máxima']) if 'Velocidade máxima' in carSpecRaw else None,
+            "maxSpeed": stringSeparateFloat(carSpecRaw['Velocidade máxima']) if 'Velocidade máxima' in carSpecRaw else None,
             "acceleration-0-100-km/h": stringSeparateFloat(carSpecRaw['Aceleração 0-100 km/h']) if 'Aceleração 0-100 km/h' in carSpecRaw else None,
         },
 
-        "fuel-use": {
+        "fuelUse": {
             "urban": separateFuelUse(carSpecRaw,'urban') if 'Consumo urbano' in carSpecRaw else None,
             "road": separateFuelUse(carSpecRaw,'road') if 'Consumo rodoviario' in carSpecRaw else None,
         },
 
-        "driving-range": {
+        "drivingRange": {
             "urban": separateDrivingRange(carSpecRaw,'urban') if 'Autonomia urbana' in carSpecRaw else None,
             "road": separateDrivingRange(carSpecRaw,'road') if 'Autonomia rodoviaria' in carSpecRaw else None,
+        },
+
+        "source": {
+            "url": 'https://www.carrosnaweb.com.br/fichadetalhe.asp?codigo={}'.format(carId),
+            "carId": carId,
+            "domain": 'www.carrosnaweb.com.br',
         }
     }
     return carSpec
