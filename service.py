@@ -145,7 +145,8 @@ def separateDrivingRange(carSpecRaw,option):
 def createCleanCarSpec(carSpecRaw, carName,carId):
     carSpec = {
         "name": carName,
-        "brand": 
+        "brand": carName.split()[0],
+        "model": ' '.join(carName.split()[1:]),
         "year": int(carSpecRaw["Ano"]) if 'Ano' in carSpecRaw else None,
         "price": stringSeparateInt(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
         "fuel": carSpecRaw["Combustível"] if 'Combustível' in carSpecRaw else None,
