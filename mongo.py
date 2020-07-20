@@ -1,7 +1,8 @@
 from pymongo import MongoClient
 import pprint
+import os
 
-client = MongoClient('localhost', 27017)
+client = MongoClient(os.environ.get('MONGO_URL'))
 
 db = client.get_database('techtop')
 
