@@ -9,7 +9,9 @@ from carScrap.extractor import CarSpecExtractor
 class CarSpecSpider(scrapy.Spider):
     name = 'CarSpecSpider'
 
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(1,5)]
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.2000.html']
+
+    # .format(c) for c in range(1,5)
     
 
     def parse(self, response):
@@ -51,7 +53,9 @@ class CarSpecSpider(scrapy.Spider):
         extractor.checkDoubleFields(carSpecRaw)
 
        
-         # pprint.pprint(carSpecRaw)
+        # pprint.pprint(carSpecRaw)
+
+        # pprint.pprint(valuesFilter)
 
         carSpec = createCleanCarSpec(carSpecRaw,carName,carId)
 

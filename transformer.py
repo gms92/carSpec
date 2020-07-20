@@ -1,5 +1,26 @@
 import pprint
 
+def stringSeparatePrice(string):
+
+    splited = string.split()
+    splitedList = []
+    
+    for a in splited:
+
+        if a[0].isdigit():
+            a = int(a.replace(".", ""))
+            splitedList.append(a)
+
+        else:
+            splitedList.append(a)
+    
+    splitedObj = {
+        "unit": splitedList[0],
+        "value": splitedList[1]
+    }
+    
+    return splitedObj
+
 def stringSeparateInt(string):
 
     splited = string.split()
@@ -17,7 +38,6 @@ def stringSeparateInt(string):
     return splitedList
 
 
-
 def stringSeparateFloat(string):
 
     splited = string.split()
@@ -32,19 +52,71 @@ def stringSeparateFloat(string):
         else:
             splitedList.append(a)
     
-    return splitedList
+    splitedObj = {
+        "value": splitedList[0],
+        "unit": splitedList[1]
+    }
+    
+    return splitedObj
 
+def separateMaxPowerAndTorque(string,option):
 
-def separateVolume(string):
+    splited = string.split()
+    splitedList = []
+
+    for a in splited:
+
+        if a[0].isdigit():
+            a = float(a.replace(",", "."))
+            splitedList.append(a)
+
+        else:
+            splitedList.append(a)
+
+    if len(splitedList)>7:
+        splitedObj = [{
+            "type": "alcool",
+            "value": splitedList[0],
+            "unit": "cv" if option=="power" else "kgfm"
+            }, 
+            {
+            "type": "gasolina",
+            "value": splitedList[3],
+            "unit": "cv" if option=="power" else "kgfm"
+            },
+            {
+            "rpm": splitedList[7],
+            }]
+    else:
+        splitedObj = {
+            "value": splitedList[0],
+            "unit": "cv" if option=="power" else "kgfm",
+            "rpm": splitedList[3]
+        }
+
+    return splitedObj
+        
+
+def separateVolumeAndArea(string,option):
 
     splited = string.split()
     splitedList = []
 
     splitedList.append(float(splited[0].replace(',','.')))
-    splitedList.append(splited[1])
-    splitedList.append(3)
 
-    return splitedList
+    if option=="volume":
+        splitedList.append("cm3")
+
+    elif option=="area":
+        splitedList.append("cm2")
+
+    
+    splitedObj = {
+        "value": splitedList[0],
+        "unit": splitedList[1]
+    }
+
+    return splitedObj
 
 
 def separateCheckUp(string):
@@ -60,22 +132,16 @@ def separateCheckUp(string):
             else:
                 splitedList.append(a)
 
-        return splitedList
+        splitedObj = {
+        "unit": splitedList[0],
+        "value": splitedList[1]
+        }
+
+        return splitedObj
 
     else:
         return string
 
-
-def separateArea(string):
-
-    splited = string.split()
-    splitedList = []
-
-    splitedList.append(float(splited[0].replace(',','.')))
-    splitedList.append(splited[1])
-    splitedList.append(2)
-
-    return splitedList
 
 def separateCompressionRatio(string):
 
@@ -93,7 +159,11 @@ def separateFuelUse(carSpecRaw,option):
 
         if 'Consumo urbano2' in carSpecRaw:
             splited_2 = stringSeparateFloat(carSpecRaw['Consumo urbano2'])
+            splited["type"] = 'alcool'
+            splited_2["type"] = 'gasolina'
+
             splitedList.extend((splited,splited_2))
+
             return splitedList
         
         else:
@@ -106,6 +176,9 @@ def separateFuelUse(carSpecRaw,option):
 
         if 'Consumo rodoviario2' in carSpecRaw:
             splited_2 = stringSeparateFloat(carSpecRaw['Consumo rodoviario2'])
+            splited["type"] = 'alcool'
+            splited_2["type"] = 'gasolina'
+
             splitedList.extend((splited,splited_2))
             return splitedList
         
@@ -122,7 +195,11 @@ def separateDrivingRange(carSpecRaw,option):
 
         if 'Autonomia urbana2' in carSpecRaw:
             splited_2 = stringSeparateFloat(carSpecRaw['Autonomia urbana2'])
+            splited["type"] = 'alcool'
+            splited_2["type"] = 'gasolina'
+
             splitedList.extend((splited,splited_2))
+
             return splitedList
         
         else:
@@ -135,7 +212,11 @@ def separateDrivingRange(carSpecRaw,option):
 
         if 'Autonomia rodoviaria2' in carSpecRaw:
             splited_2 = stringSeparateFloat(carSpecRaw['Autonomia rodoviaria2'])
+            splited["type"] = 'alcool'
+            splited_2["type"] = 'gasolina'
+
             splitedList.extend((splited,splited_2))
+            
             return splitedList
         
         else:
@@ -148,10 +229,10 @@ def createCleanCarSpec(carSpecRaw, carName,carId):
         "brand": carName.split()[0],
         "model": ' '.join(carName.split()[1:]),
         "year": int(carSpecRaw["Ano"]) if 'Ano' in carSpecRaw else None,
-        "price": stringSeparateInt(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
+        "price": stringSeparatePrice(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
         "fuel": carSpecRaw["Combustível"] if 'Combustível' in carSpecRaw else None,
-        "IPVA": stringSeparateInt(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
-        "insurance": stringSeparateInt(carSpecRaw["Seguro"]) if 'Seguro' in carSpecRaw else None,
+        "IPVA": stringSeparatePrice(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
+        "insurance": stringSeparatePrice(carSpecRaw["Seguro"]) if 'Seguro' in carSpecRaw else None,
         "checkUpPrice": separateCheckUp(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
         "origin": carSpecRaw["Procedência"] if 'Procedência' in carSpecRaw else None,
         "guarantee": stringSeparateInt(carSpecRaw["Garantia"]) if 'Garantia' in carSpecRaw else None,
@@ -169,20 +250,31 @@ def createCleanCarSpec(carSpecRaw, carName,carId):
             "aspiration": carSpecRaw["Aspiração"] if 'Aspiração' in carSpecRaw else None,
             "layout": carSpecRaw["Disposição"] if 'Disposição' in carSpecRaw else None,
             "powerSupply": carSpecRaw["Alimentação"] if 'Alimentação' in carSpecRaw else None,
-            "cylinders": stringSeparateInt(carSpecRaw["Cilindros"]) if 'Cilindros' in carSpecRaw else None,
-            "valveControl": carSpecRaw["Comando de válvulas"] if 'Comando de válvulas' in carSpecRaw else None,
-            "valvesPerCylinder": int(carSpecRaw["Válvulas por cilindro"]) if 'Válvulas por cilindro' in carSpecRaw else None,
-            "cylinderDiameter": stringSeparateFloat(carSpecRaw["Diâmetro dos cilindros"]) if 'Diâmetro dos cilindros' in carSpecRaw else None,
-            "compressionRatio": separateCompressionRatio(carSpecRaw["Razão de compressão"]) if 'Razão de compressão' in carSpecRaw else None,
-            "pistonStroke": stringSeparateFloat(carSpecRaw["Curso dos pistões"]) if 'Curso dos pistões' in carSpecRaw else None,
-            "cubicCapacity": separateVolume(carSpecRaw['Cilindrada']) if 'Cilindrada' in carSpecRaw else None,
-            "maxPower": stringSeparateFloat(carSpecRaw['Potência máxima']) if 'Potência máxima' in carSpecRaw else None,
-            "motorCode": carSpecRaw['Código do motor'] if 'Código do motor' in carSpecRaw else None,
-            "maxTorque": stringSeparateFloat(carSpecRaw['Torque máximo']) if 'Torque máximo' in carSpecRaw else None,
-            "weightPower": stringSeparateFloat(carSpecRaw['Peso/potência']) if 'Peso/potência' in carSpecRaw else None,
-            "specificTorque": stringSeparateFloat(carSpecRaw['Torque específico']) if 'Torque específico' in carSpecRaw else None,
-            "weightTorque": stringSeparateFloat(carSpecRaw['Peso/torque']) if 'Peso/torque' in carSpecRaw else None ,
-            "specificPower": stringSeparateFloat(carSpecRaw['Potência específica']) if 'Potência específica' in carSpecRaw else None
+            
+            "valves":{
+                "control": carSpecRaw["Comando de válvulas"] if 'Comando de válvulas' in carSpecRaw else None,
+                "perCylinder": int(carSpecRaw["Válvulas por cilindro"]) if 'Válvulas por cilindro' in carSpecRaw else None
+            },
+            "cylinder": {
+                "capacity": separateVolumeAndArea(carSpecRaw['Cilindrada'],'volume') if 'Cilindrada' in carSpecRaw else None,
+                "quantity": stringSeparateInt(carSpecRaw["Cilindros"]) if 'Cilindros' in carSpecRaw else None,
+                "diameter": stringSeparateFloat(carSpecRaw["Diâmetro dos cilindros"]) if 'Diâmetro dos cilindros' in carSpecRaw else None,
+                "pistonStroke": stringSeparateFloat(carSpecRaw["Curso dos pistões"]) if 'Curso dos pistões' in carSpecRaw else None,
+                "compressionRatio": separateCompressionRatio(carSpecRaw["Razão de compressão"]) if 'Razão de compressão' in carSpecRaw else None,
+            },
+            "power": {
+                "max": separateMaxPowerAndTorque(carSpecRaw['Potência máxima'],"power") if 'Potência máxima' in carSpecRaw else None,
+                "specific": stringSeparateFloat(carSpecRaw['Potência específica']) if 'Potência específica' in carSpecRaw else None,
+                "weight": stringSeparateFloat(carSpecRaw['Peso/potência']) if 'Peso/potência' in carSpecRaw else None,
+            },
+            "torque": {
+                "max": separateMaxPowerAndTorque(carSpecRaw['Torque máximo'],"torque") if 'Torque máximo' in carSpecRaw else None,
+                "specific": stringSeparateFloat(carSpecRaw['Torque específico']) if 'Torque específico' in carSpecRaw else None,
+                "weight": stringSeparateFloat(carSpecRaw['Peso/torque']) if 'Peso/torque' in carSpecRaw else None,
+            },
+            
+            "engineCode": carSpecRaw['Código do motor'] if 'Código do motor' in carSpecRaw else None,
+            
         },
 
         "transmission": {
@@ -232,9 +324,9 @@ def createCleanCarSpec(carSpecRaw, carName,carId):
         },
 
         "aerodynamics": {
-            "frontArea": separateArea(carSpecRaw['Área frontal (A)']) if 'Área frontal (A)' in carSpecRaw else None,
-            "dragCoefficient": stringSeparateFloat(carSpecRaw['Coeficiente de arrasto (Cx)']) if 'Coeficiente de arrasto (Cx)' in carSpecRaw else None,
-            "frontAreaCorrected": separateArea(carSpecRaw['Área frontal corrigida']) if 'Área frontal corrigida' in carSpecRaw else None,
+            "frontArea": separateVolumeAndArea(carSpecRaw['Área frontal (A)'],'area') if 'Área frontal (A)' in carSpecRaw else None,
+            "dragCoefficient": float(carSpecRaw['Coeficiente de arrasto (Cx)'].replace(',','.')) if 'Coeficiente de arrasto (Cx)' in carSpecRaw else None,
+            "frontAreaCorrected": separateVolumeAndArea(carSpecRaw['Área frontal corrigida'],'area') if 'Área frontal corrigida' in carSpecRaw else None,
         },
 
         "performance": {
