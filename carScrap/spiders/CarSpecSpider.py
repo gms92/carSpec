@@ -1,5 +1,6 @@
 import scrapy
 import os
+import re
 import pprint
 from transformer import createCleanCarSpec
 from mongo import saveToMongo
@@ -9,7 +10,7 @@ from carScrap.extractor import CarSpecExtractor
 class CarSpecSpider(scrapy.Spider):
     name = 'CarSpecSpider'
 
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.2000.html']
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.1441.html']
 
     # .format(c) for c in range(1,5)
     
@@ -26,6 +27,8 @@ class CarSpecSpider(scrapy.Spider):
         valueRaw=[]
 
         carName = response.xpath("//tr/td/font[@size='4']/text()").extract_first()
+
+        
         
         for items in response.xpath("//tr"):
             keyRaw.append(items.xpath("./td[@align='right']/font[@size='2']/descendant::text()").getall())

@@ -1,4 +1,5 @@
 import pprint
+import re
 
 def stringSeparatePrice(string):
 
@@ -216,17 +217,28 @@ def separateDrivingRange(carSpecRaw,option):
             splited_2["type"] = 'gasolina'
 
             splitedList.extend((splited,splited_2))
-            
+
             return splitedList
         
         else:
             return splited
+
+def getBrand (carName):
+
+    brands = ["Acura","Alfa Romeo","Aston Martin","Audi","Bentley","BMW","Bugatti","Buick","Cadillac","Chevrolet",
+    "Chrysler","Citroen","Dodge","Ferrari","Fiat","Ford","Geely","General Motors","GMC","Honda","Hyundai",
+    "Mercedes-Benz","Renault"]
+
+    carBrand = re.findall(r"(?=("+'|'.join(brands)+r"))", carName)
+
+    return carBrand[0]
         
         
-def createCleanCarSpec(carSpecRaw, carName,carId):
+def createCleanCarSpec(carSpecRaw,carName,carId):
+
     carSpec = {
         "name": carName,
-        "brand": carName.split()[0],
+        "brand": getBrand(carName),
         "model": ' '.join(carName.split()[1:]),
         "year": int(carSpecRaw["Ano"]) if 'Ano' in carSpecRaw else None,
         "price": stringSeparatePrice(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
@@ -351,6 +363,10 @@ def createCleanCarSpec(carSpecRaw, carName,carId):
         }
     }
     return carSpec
+
+    # txt = "Fiat Uno 2.0 16v"
+    # x = re.search(r".*?(Fiat|Renault|Mercedes)", txt)
+    # print(x.group(0))
 
    
 
