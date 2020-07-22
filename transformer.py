@@ -36,7 +36,12 @@ def stringSeparateInt(string):
         else:
             splitedList.append(a)
     
-    return splitedList
+    splitedObj = {
+        "value": splitedList[0],
+        "unit": splitedList[1]
+    }
+    
+    return splitedObj
 
 
 def stringSeparateFloat(string):
@@ -223,27 +228,38 @@ def separateDrivingRange(carSpecRaw,option):
         else:
             return splited
 
-def getBrand (carName):
+def getBrandOrModel(carName,option):
 
     brands = ["Acura","Alfa Romeo","Aston Martin","Audi","Bentley","BMW","Bugatti","Buick","Cadillac","Chevrolet",
-    "Chrysler","Citroen","Dodge","Ferrari","Fiat","Ford","Geely","General Motors","GMC","Honda","Hyundai",
-    "Mercedes-Benz","Renault"]
+    "Chrysler","Citroen","Dodge","Ferrari","Fiat","Ford","Geely","General Motors","GMC","Honda","Hyundai","Infiniti",
+    "Jaguar","Jeep","Kia","Koenigsegg","Lamborghini","Land Rover","Lexus","Maserati","Mazda","McLaren","Mercedes-Benz",
+    "Mini","Mitsubishi","Nissan","Pagani","Peugeot","Porsche","Ram","Renault","Rolls Royce","Saab","Subaru","Suzuki",
+    "Tata Motors","Tesla","Toyota","Volkswagen","Volvo"]
 
-    carBrand = re.findall(r"(?=("+'|'.join(brands)+r"))", carName)
+    carBrand = list(re.match(f"({'|'.join(brands)})(.*)", carName).groups())
 
-    return carBrand[0]
+    if option=='brand':
+        return carBrand[0]
+    
+    elif option=='model':
+        return carBrand[1].strip()
+
+# CONSERTAR CAMPOS        
+
+# Razão de compressão
+# Quantidade de cilindros
         
         
 def createCleanCarSpec(carSpecRaw,carName,carId):
 
     carSpec = {
         "name": carName,
-        "brand": getBrand(carName),
-        "model": ' '.join(carName.split()[1:]),
+        "brand": getBrandOrModel(carName,'brand'),
+        "model": getBrandOrModel(carName,'model'),
         "year": int(carSpecRaw["Ano"]) if 'Ano' in carSpecRaw else None,
         "price": stringSeparatePrice(carSpecRaw["Preço"]) if 'Preço' in carSpecRaw else None,
         "fuel": carSpecRaw["Combustível"] if 'Combustível' in carSpecRaw else None,
-        "IPVA": stringSeparatePrice(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
+        "IPVA": separateCheckUp(carSpecRaw["IPVA"]) if 'IPVA' in carSpecRaw else None,
         "insurance": stringSeparatePrice(carSpecRaw["Seguro"]) if 'Seguro' in carSpecRaw else None,
         "checkUpPrice": separateCheckUp(carSpecRaw["Revisões"]) if 'Revisões' in carSpecRaw else None,
         "origin": carSpecRaw["Procedência"] if 'Procedência' in carSpecRaw else None,
