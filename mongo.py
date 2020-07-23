@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import pprint
 import os
 
-client = MongoClient(os.environ.get('MONGO_URL'))
+client = MongoClient(os.environ.get('MONGO_LOCAL'))
 
 db = client.get_database('test')
 

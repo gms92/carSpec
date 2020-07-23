@@ -154,7 +154,7 @@ def separateCompressionRatio(string):
     splited = string.split(":")
     splitedList = []
     splitedList.extend((float(splited[0].replace(",", ".")), int(splited[1])))
-    return splitedList
+    return splitedList[0]
 
 def separateFuelUse(carSpecRaw,option):
 
@@ -253,6 +253,7 @@ def getBrandOrModel(carName,option):
 def createCleanCarSpec(carSpecRaw,carName,carId):
 
     carSpec = {
+        "id": carId,
         "name": carName,
         "brand": getBrandOrModel(carName,'brand'),
         "model": getBrandOrModel(carName,'model'),
@@ -285,7 +286,7 @@ def createCleanCarSpec(carSpecRaw,carName,carId):
             },
             "cylinder": {
                 "capacity": separateVolumeAndArea(carSpecRaw['Cilindrada'],'volume') if 'Cilindrada' in carSpecRaw else None,
-                "quantity": stringSeparateInt(carSpecRaw["Cilindros"]) if 'Cilindros' in carSpecRaw else None,
+                "quantity": int(carSpecRaw["Cilindros"].split()[0]) if 'Cilindros' in carSpecRaw else None,
                 "diameter": stringSeparateFloat(carSpecRaw["Diâmetro dos cilindros"]) if 'Diâmetro dos cilindros' in carSpecRaw else None,
                 "pistonStroke": stringSeparateFloat(carSpecRaw["Curso dos pistões"]) if 'Curso dos pistões' in carSpecRaw else None,
                 "compressionRatio": separateCompressionRatio(carSpecRaw["Razão de compressão"]) if 'Razão de compressão' in carSpecRaw else None,
@@ -374,7 +375,6 @@ def createCleanCarSpec(carSpecRaw,carName,carId):
 
         "source": {
             "url": 'https://www.carrosnaweb.com.br/fichadetalhe.asp?codigo={}'.format(carId),
-            "carId": carId,
             "domain": 'www.carrosnaweb.com.br',
         }
     }
