@@ -10,7 +10,7 @@ from carScrap.extractor import CarSpecExtractor
 class CarSpecSpider(scrapy.Spider):
     name = 'CarSpecSpider'
 
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(1,100)]
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(1,15400)]
 
     def parse(self, response):
         
