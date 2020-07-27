@@ -10,10 +10,7 @@ from carScrap.extractor import CarSpecExtractor
 class CarSpecSpider(scrapy.Spider):
     name = 'CarSpecSpider'
 
-    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(5000,5010)]
-
-    # .format(c) for c in range(1,5)
-    
+    start_urls = ['file:///home/volanty/Documentos/carrosnaweb/fichadetalhe/fichadetalhe.{}.html'.format(c) for c in range(1,100)]
 
     def parse(self, response):
         
@@ -47,24 +44,15 @@ class CarSpecSpider(scrapy.Spider):
 
         extractor.transformKeys(keysFilter)
 
-        
-
         carSpecRaw = {k:v for l1,l2 in zip(keysFilter,valuesFilter) for k,v in zip(l1,l2)}
 
         carSpecRaw = {k.strip(): v for (k, v) in carSpecRaw.items()}
 
         extractor.checkDoubleFields(carSpecRaw)
 
-       
-        # pprint.pprint(carSpecRaw)
-
-        # pprint.pprint(valuesFilter)
-
         carSpec = createCleanCarSpec(carSpecRaw,carName,carId)
 
-        pprint.pprint(carSpec)
-
-        saveToMongo(carSpec)
+        saveToMongo(carSpec,'oi','blz')
 
 
 

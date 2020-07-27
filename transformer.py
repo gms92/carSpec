@@ -1,4 +1,3 @@
-import pprint
 import re
 
 def stringSeparatePrice(string):
@@ -244,16 +243,11 @@ def getBrandOrModel(carName,option):
     elif option=='model':
         return carBrand[1].strip()
 
-# CONSERTAR CAMPOS        
 
-# Razão de compressão
-# Quantidade de cilindros
-        
-        
 def createCleanCarSpec(carSpecRaw,carName,carId):
 
     carSpec = {
-        "id": carId,
+        "id": int(carId),
         "name": carName,
         "brand": getBrandOrModel(carName,'brand'),
         "model": getBrandOrModel(carName,'model'),
@@ -380,9 +374,7 @@ def createCleanCarSpec(carSpecRaw,carName,carId):
     }
     return carSpec
 
-    # txt = "Fiat Uno 2.0 16v"
-    # x = re.search(r".*?(Fiat|Renault|Mercedes)", txt)
-    # print(x.group(0))
+
 
    
 
